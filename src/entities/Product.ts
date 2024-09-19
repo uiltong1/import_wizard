@@ -1,11 +1,11 @@
 import { Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { Order } from './Order';
+import { ProductOrder } from './ProductOrder';
 
 @Entity()
 export class Product {
     @PrimaryColumn()
     id!: number;
 
-    @OneToMany(() => Order, order => order.product)
-    orders!: Order[]; 
+    @OneToMany(() => ProductOrder, productOrder => productOrder.product)
+    productOrders!: ProductOrder[];
 }
