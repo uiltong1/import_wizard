@@ -1,11 +1,13 @@
 // src/index.ts
 import express from 'express';
 import { AppDataSource } from './database/dataSource';
+import orderRoutes from './routes/orderRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use('/api', orderRoutes);
 
 AppDataSource.initialize()
     .then(() => {
