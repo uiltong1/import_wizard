@@ -1,11 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryColumn } from 'typeorm';
 import { User } from './User';
 import { Product } from './Product';
 
 @Entity()
 export class Order {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id!: number;
+
+    @Column()
+    value!: string;
 
     @ManyToOne(() => Product, product => product.orders)
     product!: Product;
@@ -13,6 +16,6 @@ export class Order {
     @ManyToOne(() => User, user => user.orders)
     user!: User;
 
-    @Column()
-    quantity!: number;
+    @Column({ type: 'date' })
+    date!: Date;
 }

@@ -1,13 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity,  Column, OneToMany, PrimaryColumn } from 'typeorm';
 import { Order } from './Order';
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id!: number;
 
     @Column()
-    value!: string;
+    name!: string;
 
     @OneToMany(() => Order, order => order.user)
     orders!: Order[];

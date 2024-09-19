@@ -1,13 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { Order } from './Order';
 
 @Entity()
 export class Product {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id!: number;
-
-    @Column()
-    value!: string;
 
     @OneToMany(() => Order, order => order.product)
     orders!: Order[]; 
