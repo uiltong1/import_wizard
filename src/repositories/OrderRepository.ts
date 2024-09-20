@@ -2,8 +2,31 @@ import { OrderRepositoryInterface } from './interfaces/OrderRepositoryInterface'
 import { Order } from '../entities/Order';
 import { AppDataSource } from '../database/dataSource';
 
+
 export class OrderRepository implements OrderRepositoryInterface {
     private orderRepository = AppDataSource.getRepository(Order);
+
+    public async getOrders(orderId?: number, startDate?: Date, endDate?: Date): Promise<Order[]> {
+        const queryBuilder = this.orderRepository.createQueryBuilder('order')
+            .leftJoinAndSelect('order.user', 'user')
+            .leftJoinAndSelect('order.productOrders', 'productOrder')
+            .leftJoinAndSelect('productOrder.product', 'product');
+
+        if (orderId) {
+            queryBuilder.andWhere('order.id = :orderId', { orderId });
+        }
+
+        if (startDate) {
+            queryBuilder.andWhere('order.date >= :startDate', { startDate });
+        }
+
+        if (endDate) {
+            queryBuilder.andWhere('order.date <= :endDate', { endDate });
+        }
+
+        return await queryBuilder.getMany();
+    }
+
 
     public async findOrderById(orderId: number): Promise<Order | null> {
         return await this.orderRepository.findOne({

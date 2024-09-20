@@ -21,6 +21,8 @@ const orderService = new OrderService(orderRepository, userService, productServi
 
 const orderController = new OrderController(orderService);
 
+router.get('/orders', (req, res) => orderController.getOrders(req, res));
+
 router.post('/import-orders', upload.single('file'), async (req, res) => {
     try {
         await orderController.importOrders(req, res);

@@ -4,6 +4,7 @@ import { ProductService } from './ProductService';
 import { Order } from '../entities/Order';
 import { OrderRepositoryInterface } from '../repositories/interfaces/OrderRepositoryInterface';
 import { ProductOrder } from '../entities/ProductOrder';
+import { UserDTO } from '../DTO/UserDTO';
 
 export class OrderService {
     private orderRepository: OrderRepositoryInterface;
@@ -14,6 +15,36 @@ export class OrderService {
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.productService = productService;
+    }
+
+    public async getOrders(orderId?: number, startDate?: Date, endDate?: Date): Promise<UserDTO[]> {
+        const orders = await this.orderRepository.getOrders(orderId, startDate, endDate);
+
+        const userMap = new Map<number, UserDTO>();
+
+        for (const order of orders) {
+            const total = order.productOrders.reduce((sum, po) => sum + po.value, 0).toFixed(2);
+
+            if (!userMap.has(order.user.id)) {
+                userMap.set(order.user.id, {
+                    user_id: order.user.id,
+                    name: order.user.name,
+                    orders: [],
+                });
+            }
+
+            userMap.get(order.user.id)?.orders.push({
+                order_id: order.id,
+                total,
+                date: order.date instanceof Date ? order.date.toISOString().split('T')[0] : new Date(order.date).toISOString().split('T')[0],
+                products: order.productOrders.map(po => ({
+                    product_id: po.product.id,
+                    value: po.value.toString(),
+                })),
+            });
+        }
+
+        return Array.from(userMap.values());
     }
 
 
@@ -61,7 +92,7 @@ export class OrderService {
         const product = await this.productService.findOrCreateProduct(data.productId);
 
         let order = await this.orderRepository.findOrderById(data.orderId);
-        
+
         if (!order) {
             order = new Order();
             order.id = data.orderId;
