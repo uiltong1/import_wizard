@@ -17,9 +17,8 @@ export class OrderService {
         this.productService = productService;
     }
 
-    public async getOrders(orderId?: number, startDate?: Date, endDate?: Date): Promise<UserDTO[]> {
-        const orders = await this.orderRepository.getOrders(orderId, startDate, endDate);
-
+    public async getOrders(orderId?: number, startDate?: Date, endDate?: Date, page: number = 1, limit: number = 10): Promise<UserDTO[]> {
+        const { orders, total } = await this.orderRepository.getOrders(orderId, startDate, endDate, page, limit);
         const userMap = new Map<number, UserDTO>();
 
         for (const order of orders) {
@@ -45,6 +44,7 @@ export class OrderService {
         }
 
         return Array.from(userMap.values());
+
     }
 
 

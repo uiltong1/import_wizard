@@ -6,7 +6,13 @@ import { AppDataSource } from '../database/dataSource';
 export class OrderRepository implements OrderRepositoryInterface {
     private orderRepository = AppDataSource.getRepository(Order);
 
-    public async getOrders(orderId?: number, startDate?: Date, endDate?: Date): Promise<Order[]> {
+    public async getOrders(
+        orderId?: number,
+        startDate?: Date,
+        endDate?: Date,
+        page: number = 1,
+        limit: number = 10
+    ): Promise<{ orders: Order[], total: number }> {
         const queryBuilder = this.orderRepository.createQueryBuilder('order')
             .leftJoinAndSelect('order.user', 'user')
             .leftJoinAndSelect('order.productOrders', 'productOrder')
@@ -24,7 +30,12 @@ export class OrderRepository implements OrderRepositoryInterface {
             queryBuilder.andWhere('order.date <= :endDate', { endDate });
         }
 
-        return await queryBuilder.getMany();
+        const [result, total] = await queryBuilder
+            .skip((page - 1) * limit)
+            .take(limit)
+            .getManyAndCount();
+
+        return { orders: result, total };
     }
 
 
