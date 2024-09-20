@@ -16,9 +16,9 @@ export class OrderController {
             const endDate = req.query.endDate ? new Date(req.query.endDate as string) : undefined;
             const page = req.query?.page ? Number(req.query?.page) : 1;
             const limit = req.query?.limit ? Number(req.query?.limit) : 10;
-    
-            const orders: UserDTO[] = await this.orderService.getOrders(orderId, startDate, endDate, page, limit);
-            return res.json(orders);
+
+            const { orders, total } = await this.orderService.getOrders(orderId, startDate, endDate, page, limit);
+            return res.json({ orders, total });
         } catch (error) {
             console.error('Erro ao obter pedidos:', error);
             return res.status(500).json({ error: 'Erro ao obter pedidos' });

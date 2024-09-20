@@ -17,7 +17,7 @@ export class OrderService {
         this.productService = productService;
     }
 
-    public async getOrders(orderId?: number, startDate?: Date, endDate?: Date, page: number = 1, limit: number = 10): Promise<UserDTO[]> {
+    public async getOrders(orderId?: number, startDate?: Date, endDate?: Date, page: number = 1, limit: number = 10): Promise<{ orders: UserDTO[], total: number }> {
         const { orders, total } = await this.orderRepository.getOrders(orderId, startDate, endDate, page, limit);
         const userMap = new Map<number, UserDTO>();
 
@@ -43,7 +43,7 @@ export class OrderService {
             });
         }
 
-        return Array.from(userMap.values());
+        return { orders: Array.from(userMap.values()), total };
 
     }
 
