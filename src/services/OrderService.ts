@@ -6,6 +6,7 @@ import { OrderRepositoryInterface } from '../repositories/interfaces/OrderReposi
 import { ProductOrder } from '../entities/ProductOrder';
 import { UserDTO } from '../DTO/UserDTO';
 import { PaginatedOrdersDTO } from '../DTO/PaginatedOrdersDTO';
+import { PaginateParamsOrdersDTO } from '../DTO/PaginateParamsOrdersDTO';
 
 export class OrderService {
     private orderRepository: OrderRepositoryInterface;
@@ -18,8 +19,8 @@ export class OrderService {
         this.productService = productService;
     }
 
-    public async getOrders(orderId?: number, startDate?: Date, endDate?: Date, page: number = 1, limit: number = 10): Promise<PaginatedOrdersDTO> {
-        const { orders, total } = await this.orderRepository.getOrders(orderId, startDate, endDate, page, limit);
+    public async getOrders({ orderId, startDate, endDate, page, limit }: PaginateParamsOrdersDTO): Promise<PaginatedOrdersDTO> {
+        const { orders, total } = await this.orderRepository.getOrders({ orderId, startDate, endDate, page, limit });
         const userMap = new Map<number, UserDTO>();
 
         for (const order of orders) {

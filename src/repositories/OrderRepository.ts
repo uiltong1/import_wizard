@@ -1,17 +1,18 @@
 import { OrderRepositoryInterface } from './interfaces/OrderRepositoryInterface';
 import { Order } from '../entities/Order';
 import { AppDataSource } from '../database/dataSource';
+import { PaginateParamsOrdersDTO } from '../DTO/PaginateParamsOrdersDTO';
 
 
 export class OrderRepository implements OrderRepositoryInterface {
     private orderRepository = AppDataSource.getRepository(Order);
 
     public async getOrders(
-        orderId?: number,
-        startDate?: Date,
-        endDate?: Date,
-        page: number = 1,
-        limit: number = 10
+        { orderId,
+            startDate,
+            endDate,
+            page = 1,
+            limit = 10 }: PaginateParamsOrdersDTO
     ): Promise<{ orders: Order[], total: number }> {
         const queryBuilder = this.orderRepository.createQueryBuilder('order')
             .leftJoinAndSelect('order.user', 'user')

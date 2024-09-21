@@ -17,7 +17,7 @@ export class OrderController {
             const endDate = req.query.endDate ? new Date(req.query.endDate as string) : undefined;
             const page = req.query?.page ? Number(req.query?.page) : 1;
             const limit = req.query?.limit ? Number(req.query?.limit) : 10;
-            const result = await this.orderService.getOrders(orderId, startDate, endDate, page, limit);
+            const result = await this.orderService.getOrders({ orderId, startDate, endDate, page, limit });
             return res.json(result)
 
         } catch (error) {

@@ -1,9 +1,10 @@
+import { PaginateParamsOrdersDTO } from "../../DTO/PaginateParamsOrdersDTO";
 import { Order } from "../../entities/Order";
 
 
 export interface OrderRepositoryInterface {
 
-    getOrders(orderId?: number, startDate?: Date, endDate?: Date, page?: number, limit?: number): Promise<{ orders: Order[], total: number }>;
+    getOrders(paginateParams: PaginateParamsOrdersDTO): Promise<{ orders: Order[], total: number }>;
 
     findOrderById(orderId: number): Promise<Order | null>;
 
