@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { OrderService } from '../services/OrderService';
-import { UserDTO } from '../DTO/UserDTO';
 import { PaginatedOrdersDTO } from '../DTO/PaginatedOrdersDTO';
 
 export class OrderController {
