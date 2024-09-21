@@ -1,8 +1,8 @@
 import { AppDataSource } from '../database/dataSource';
 import { User } from '../entities/User';
-import { IUserRepository } from './interfaces/UserRepositoryInterface';
+import { UserRepositoryInterface } from './interfaces/UserRepositoryInterface';
 
-export class UserRepository implements IUserRepository {
+export class UserRepository implements UserRepositoryInterface {
     private userRepository = AppDataSource.getRepository(User);
 
     public async findOneById(userId: number): Promise<User | null> {

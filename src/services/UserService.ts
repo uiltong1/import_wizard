@@ -1,10 +1,10 @@
 import { User } from '../entities/User';
-import { IUserRepository } from '../repositories/interfaces/UserRepositoryInterface';
+import { UserRepositoryInterface } from '../repositories/interfaces/UserRepositoryInterface';
 
 export class UserService {
-    private userRepository: IUserRepository;
+    private userRepository: UserRepositoryInterface;
 
-    constructor(userRepository: IUserRepository) {
+    constructor(userRepository: UserRepositoryInterface) {
         this.userRepository = userRepository;
     }
 
