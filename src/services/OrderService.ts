@@ -108,7 +108,7 @@ export class OrderService {
         }
     }
 
-    private async createOrder(data: { userId: number; customerName: string; orderId: number; productId: number; productValue: number; date: Date }): Promise<Order | null> {
+    protected async createOrder(data: { userId: number; customerName: string; orderId: number; productId: number; productValue: number; date: Date }): Promise<Order | null> {
         const user = await this.userService.findOrCreateUser(data.userId, data.customerName);
         const product = await this.productService.findOrCreateProduct(data.productId);
         let order = await this.orderRepository.findOrderById(data.orderId);

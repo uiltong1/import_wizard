@@ -37,7 +37,7 @@ export class OrderController {
         try {
             await this.orderService.importOrders(filePath);
             res.status(200).json({
-                message: 'Pedidos adicionados a fila de importação!',
+                message: 'Pedidos adicionados à fila de importação!',
             });
         } catch (error) {
             const message = (error as Error).message || 'Erro desconhecido';
