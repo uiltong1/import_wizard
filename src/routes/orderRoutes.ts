@@ -1,25 +1,14 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { OrderController } from '../controllers/OrderController';
-import { OrderService } from '../services/OrderService';
-import { UserService } from '../services/UserService';
-import { ProductService } from '../services/ProductService';
-import { UserRepository } from '../repositories/UserRepository';
-import { ProductRepository } from '../repositories/ProductRepository';
-import { OrderRepository } from '../repositories/OrderRepository';
+import { TYPES } from '../types/types';
+import { container } from '../container';
 
 const router = Router();
 const upload = multer({ dest: 'uploads/' });
 
-const orderRepository = new OrderRepository();
-const userRepository = new UserRepository();
-const productRepository = new ProductRepository();
+const orderController = container.get<OrderController>(TYPES.OrderController);
 
-const userService = new UserService(userRepository);
-const productService = new ProductService(productRepository);
-const orderService = new OrderService(orderRepository, userService, productService);
-
-const orderController = new OrderController(orderService);
 
 /**
  * @swagger

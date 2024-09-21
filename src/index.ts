@@ -1,6 +1,8 @@
+import "reflect-metadata";
+
 import express from 'express';
 import { AppDataSource } from './database/dataSource';
-import { swaggerUi, swaggerDocs } from './config/swagger'; 
+import { swaggerUi, swaggerDocs } from './config/swagger';
 
 import orderRoutes from './routes/orderRoutes';
 import logger from './config/logger';

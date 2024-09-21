@@ -9,16 +9,15 @@ import { PaginatedOrdersDTO } from '../DTO/PaginatedOrdersDTO';
 import { PaginateParamsOrdersDTO } from '../DTO/PaginateParamsOrdersDTO';
 import logger from '../config/logger';
 import { sendOrderToQueue } from '../queues/orderQueue';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../types/types';
 
+@injectable()
 export class OrderService {
-    private orderRepository: OrderRepositoryInterface;
-    private userService: UserService;
-    private productService: ProductService;
-
-    constructor(orderRepository: OrderRepositoryInterface, userService: UserService, productService: ProductService) {
-        this.orderRepository = orderRepository;
-        this.userService = userService;
-        this.productService = productService;
+    constructor(@inject(TYPES.OrderRepository) private orderRepository: OrderRepositoryInterface,
+        @inject(TYPES.UserService) private userService: UserService,
+        @inject(TYPES.ProductService) private productService: ProductService
+    ) {
     }
 
     public async getOrders({ orderId, startDate, endDate, page, limit }: PaginateParamsOrdersDTO): Promise<PaginatedOrdersDTO> {

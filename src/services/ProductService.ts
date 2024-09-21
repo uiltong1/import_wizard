@@ -1,11 +1,11 @@
+import { inject, injectable } from 'inversify';
 import { Product } from '../entities/Product';
 import { ProductRepositoryInterface } from '../repositories/interfaces/ProductRepositoryInterface';
+import { TYPES } from '../types/types';
 
+@injectable()
 export class ProductService {
-    private productRepository: ProductRepositoryInterface;
-
-    constructor(productRepository: ProductRepositoryInterface) {
-        this.productRepository = productRepository;
+    constructor(@inject(TYPES.ProductRepository) private productRepository: ProductRepositoryInterface) {
     }
 
     public async findOrCreateProduct(productId: number): Promise<Product> {

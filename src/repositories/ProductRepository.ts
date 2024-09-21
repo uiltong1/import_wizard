@@ -1,7 +1,9 @@
+import { injectable } from 'inversify';
 import { AppDataSource } from '../database/dataSource';
 import { Product } from '../entities/Product';
 import { ProductRepositoryInterface } from './interfaces/ProductRepositoryInterface';
 
+@injectable()
 export class ProductRepository implements ProductRepositoryInterface {
     private productRepository = AppDataSource.getRepository(Product);
 

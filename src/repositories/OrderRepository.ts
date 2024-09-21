@@ -2,8 +2,9 @@ import { OrderRepositoryInterface } from './interfaces/OrderRepositoryInterface'
 import { Order } from '../entities/Order';
 import { AppDataSource } from '../database/dataSource';
 import { PaginateParamsOrdersDTO } from '../DTO/PaginateParamsOrdersDTO';
+import { injectable } from 'inversify';
 
-
+@injectable()
 export class OrderRepository implements OrderRepositoryInterface {
     private orderRepository = AppDataSource.getRepository(Order);
 

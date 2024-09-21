@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { OrderService } from '../services/OrderService';
 import { PaginatedOrdersDTO } from '../DTO/PaginatedOrdersDTO';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../types/types';
 
+@injectable()
 export class OrderController {
-    private orderService: OrderService;
-
-    constructor(orderService: OrderService) {
-        this.orderService = orderService;
+    constructor(@inject(TYPES.OrderService) private orderService: OrderService
+    ) {
     }
 
     public async getOrders(req: Request, res: Response): Promise<PaginatedOrdersDTO | Response> {

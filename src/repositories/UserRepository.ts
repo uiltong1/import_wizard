@@ -1,7 +1,9 @@
+import { injectable } from 'inversify';
 import { AppDataSource } from '../database/dataSource';
 import { User } from '../entities/User';
 import { UserRepositoryInterface } from './interfaces/UserRepositoryInterface';
 
+@injectable()
 export class UserRepository implements UserRepositoryInterface {
     private userRepository = AppDataSource.getRepository(User);
 
