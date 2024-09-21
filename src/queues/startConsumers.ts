@@ -14,5 +14,4 @@ const startConsumers = async () => {
 
 startConsumers().catch((error) => {
     logger.error('Erro ao executar a aplicação:', error);
-    process.exit(1);
 });

@@ -17,7 +17,7 @@ describe('ProductService', () => {
 
     describe('findOrCreateProduct', () => {
         it('deve retornar um produto existente', async () => {
-            const mockProduct: Product = { id: 1, productOrders: [] }; // Simule o novo produto
+            const mockProduct: Product = { id: 1, productOrders: [] };
             productRepositoryMock.findOneById.mockResolvedValue(mockProduct);
 
             const result = await productService.findOrCreateProduct(1);
