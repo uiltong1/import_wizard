@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { OrderService } from '../services/OrderService';
 import { UserDTO } from '../DTO/UserDTO';
+import { PaginatedOrdersDTO } from '../DTO/PaginatedOrdersDTO';
 
 export class OrderController {
     private orderService: OrderService;
@@ -9,18 +10,17 @@ export class OrderController {
         this.orderService = orderService;
     }
 
-    public async getOrders(req: Request, res: Response): Promise<Response> {
+    public async getOrders(req: Request, res: Response): Promise<PaginatedOrdersDTO | Response> {
         try {
             const orderId = req.query.orderId ? Number(req.query.orderId) : undefined;
             const startDate = req.query.startDate ? new Date(req.query.startDate as string) : undefined;
             const endDate = req.query.endDate ? new Date(req.query.endDate as string) : undefined;
             const page = req.query?.page ? Number(req.query?.page) : 1;
             const limit = req.query?.limit ? Number(req.query?.limit) : 10;
+            const result = await this.orderService.getOrders(orderId, startDate, endDate, page, limit);
+            return res.json(result)
 
-            const { orders, total } = await this.orderService.getOrders(orderId, startDate, endDate, page, limit);
-            return res.json({ orders, total });
         } catch (error) {
-            console.error('Erro ao obter pedidos:', error);
             return res.status(500).json({ error: 'Erro ao obter pedidos' });
         }
     }
