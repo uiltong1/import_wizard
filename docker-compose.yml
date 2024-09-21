@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+
+  app:
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - rabbitmq
+    command: ["npm", "run", "dev"]
+    ports:
+      - "3000:3000"
+
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: ["npm", "run", "start:consumers"]
+    depends_on:
+      - rabbitmq
+      - app
