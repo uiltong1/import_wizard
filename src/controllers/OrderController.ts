@@ -34,15 +34,14 @@ export class OrderController {
         const filePath = req.file.path;
 
         try {
-            const importedCount = await this.orderService.importOrders(filePath);
-            res.status(201).json({
-                message: 'Pedidos importados com sucesso!',
-                count: importedCount,
+            await this.orderService.importOrders(filePath);
+            res.status(200).json({
+                message: 'Pedidos adicionados a fila de importação!',
             });
         } catch (error) {
             const message = (error as Error).message || 'Erro desconhecido';
             res.status(500).json({
-                message: 'Erro ao importar pedidos',
+                message: 'Erro ao tentar adicionar o(s) pedido(s) na fila de importação.',
                 error: message,
             });
         }

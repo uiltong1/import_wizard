@@ -8,6 +8,7 @@ import { UserDTO } from '../DTO/UserDTO';
 import { PaginatedOrdersDTO } from '../DTO/PaginatedOrdersDTO';
 import { PaginateParamsOrdersDTO } from '../DTO/PaginateParamsOrdersDTO';
 import logger from '../config/logger';
+import { sendOrderToQueue } from '../queues/orderQueue';
 
 export class OrderService {
     private orderRepository: OrderRepositoryInterface;
@@ -57,6 +58,16 @@ export class OrderService {
 
     public async importOrders(filePath: string): Promise<void> {
         try {
+            await sendOrderToQueue(filePath);
+        } catch (error: any) {
+            logger.error('Erro ao importar pedidos', { message: error.message, stack: error.stack });
+            throw error
+        }
+    }
+
+    public async processImport(filePath: string): Promise<void> {
+        try {
+
             const lines = this.readFile(filePath);
             for (const line of lines) {
                 const orderData = this.processLine(line);
@@ -66,6 +77,7 @@ export class OrderService {
             }
         } catch (error: any) {
             logger.error('Erro ao importar pedidos', { message: error.message, stack: error.stack });
+            throw error
         }
     }
 
