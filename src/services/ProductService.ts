@@ -1,10 +1,10 @@
 import { Product } from '../entities/Product';
-import { IProductRepository } from '../repositories/interfaces/ProductRepositoryInterface';
+import { ProductRepositoryInterface } from '../repositories/interfaces/ProductRepositoryInterface';
 
 export class ProductService {
-    private productRepository: IProductRepository;
+    private productRepository: ProductRepositoryInterface;
 
-    constructor(productRepository: IProductRepository) {
+    constructor(productRepository: ProductRepositoryInterface) {
         this.productRepository = productRepository;
     }
 

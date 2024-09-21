@@ -1,8 +1,8 @@
 import { AppDataSource } from '../database/dataSource';
 import { Product } from '../entities/Product';
-import { IProductRepository } from './interfaces/ProductRepositoryInterface';
+import { ProductRepositoryInterface } from './interfaces/ProductRepositoryInterface';
 
-export class ProductRepository implements IProductRepository {
+export class ProductRepository implements ProductRepositoryInterface {
     private productRepository = AppDataSource.getRepository(Product);
 
     public async findOneById(productId: number): Promise<Product | null> {
