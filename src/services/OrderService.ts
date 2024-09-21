@@ -72,6 +72,7 @@ export class OrderService {
                 const orderData = this.processLine(line);
                 if (orderData) {
                     await this.createOrder(orderData);
+                    logger.info(JSON.stringify(orderData))
                 }
             }
         } catch (error: any) {

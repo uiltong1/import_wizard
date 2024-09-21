@@ -10,9 +10,12 @@ import { TYPES } from "./types/types";
 
 const container = new Container();
 
+// REPOSITORIES
 container.bind<OrderRepository>(TYPES.OrderRepository).to(OrderRepository);
 container.bind<UserRepository>(TYPES.UserRepository).to(UserRepository);
 container.bind<ProductRepository>(TYPES.ProductRepository).to(ProductRepository);
+
+// SERVICES
 container.bind<UserService>(TYPES.UserService).to(UserService);
 container.bind<ProductService>(TYPES.ProductService).to(ProductService);
 container.bind<OrderService>(TYPES.OrderService).to(OrderService);
