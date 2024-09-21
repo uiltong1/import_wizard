@@ -7,6 +7,7 @@ import { ProductOrder } from '../entities/ProductOrder';
 import { UserDTO } from '../DTO/UserDTO';
 import { PaginatedOrdersDTO } from '../DTO/PaginatedOrdersDTO';
 import { PaginateParamsOrdersDTO } from '../DTO/PaginateParamsOrdersDTO';
+import logger from '../config/logger';
 
 export class OrderService {
     private orderRepository: OrderRepositoryInterface;
@@ -63,8 +64,8 @@ export class OrderService {
                     await this.createOrder(orderData);
                 }
             }
-        } catch (error) {
-            console.error('Erro ao importar pedidos:', error);
+        } catch (error: any) {
+            logger.error('Erro ao importar pedidos', { message: error.message, stack: error.stack });
         }
     }
 
@@ -90,7 +91,7 @@ export class OrderService {
 
             return { userId, customerName, orderId, productId, productValue, date };
         } catch (error) {
-            console.error('Erro ao processar linha:', line, error);
+            logger.error('Erro ao processar linha:', line, error);
             return null;
         }
     }
