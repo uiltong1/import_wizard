@@ -1,16 +1,16 @@
 import { User } from "../../entities/User";
-import { IUserRepository } from "../../repositories/interfaces/UserRepositoryInterface";
+import { UserRepositoryInterface } from "../../repositories/interfaces/UserRepositoryInterface";
 import { UserService } from "../../services/UserService";
 
 describe('UserService', () => {
     let userService: UserService;
-    let userRepositoryMock: jest.Mocked<IUserRepository>;
+    let userRepositoryMock: jest.Mocked<UserRepositoryInterface>;
 
     beforeEach(() => {
         userRepositoryMock = {
             findOneById: jest.fn(),
             createUser: jest.fn(),
-        } as unknown as jest.Mocked<IUserRepository>;
+        } as unknown as jest.Mocked<UserRepositoryInterface>;
 
         userService = new UserService(userRepositoryMock);
     });
