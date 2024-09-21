@@ -1,12 +1,19 @@
+import logger from "../../config/logger";
 import { PaginateParamsOrdersDTO } from "../../DTO/PaginateParamsOrdersDTO";
 import { Order } from "../../entities/Order";
 import { Product } from "../../entities/Product";
 import { ProductOrder } from "../../entities/ProductOrder";
 import { User } from "../../entities/User";
+import { sendOrderToQueue } from "../../queues/orderQueue";
 import { OrderRepositoryInterface } from "../../repositories/interfaces/OrderRepositoryInterface";
 import { OrderService } from "../../services/OrderService";
 import { ProductService } from "../../services/ProductService";
 import { UserService } from "../../services/UserService";
+
+jest.mock("../../queues/orderQueue", () => ({
+    sendOrderToQueue: jest.fn(),
+}));
+
 
 describe('OrderService', () => {
     let orderService: OrderService;
@@ -40,17 +47,17 @@ describe('OrderService', () => {
                     user: { id: 1, name: 'User 1', orders: [] } as User,
                     date: new Date(),
                     productOrders: [{
-                        id: 1, 
+                        id: 1,
                         product: { id: 1, productOrders: [] } as Product,
                         value: 10,
-                        order: {} as Order, 
+                        order: {} as Order,
                     } as ProductOrder],
                 },
             ];
 
             orderRepositoryMock.getOrders.mockResolvedValue({ orders: mockOrders, total: 1 });
 
-            const result = await orderService.getOrders({  page: 1, limit: 10 } as PaginateParamsOrdersDTO);
+            const result = await orderService.getOrders({ page: 1, limit: 10 } as PaginateParamsOrdersDTO);
 
             expect(result).toEqual({
                 users: [{
@@ -71,7 +78,28 @@ describe('OrderService', () => {
     });
 
     describe('importOrders', () => {
-        it('deve processar e criar pedidos a partir de um arquivo', async () => {
+        it('deve importar pedidos com sucesso', async () => {
+            const filePath = 'fake/path.txt';
+
+            (sendOrderToQueue as jest.Mock).mockResolvedValue(0);
+
+            await orderService.importOrders(filePath);
+
+            expect(sendOrderToQueue).toHaveBeenCalledWith(filePath);
+        });
+
+        it('deve lançar um erro se a importação falhar', async () => {
+            const filePath = 'fake/path.txt';
+            const errorMessage = 'Erro ao enviar para a fila';
+            (sendOrderToQueue as jest.Mock).mockRejectedValue(new Error(errorMessage));
+
+            await expect(orderService.importOrders(filePath)).rejects.toThrow('Erro ao enviar para a fila');
+        });
+
+    });
+
+    describe('processImport', () => {
+        it('deve processar linhas do arquivo e criar pedidos', async () => {
             const mockReadFile = jest.spyOn(orderService as any, 'readFile').mockReturnValue([
                 "0000000070                              Palmer Prosacco00000007530000000003     1836.7420210308",
             ]);
@@ -85,18 +113,25 @@ describe('OrderService', () => {
                 date: new Date('2023-01-01'),
             });
 
-            userServiceMock.findOrCreateUser.mockResolvedValue({ id: 1, name: 'John Doe', orders: [] } as User); 
-            productServiceMock.findOrCreateProduct.mockResolvedValue({ id: 1, productOrders: [] } as Product); 
-            orderRepositoryMock.saveOrder.mockResolvedValue({
-                id: 1,
-                user: { id: 1, name: 'John Doe', orders: [] } as User,
-                date: new Date('2023-01-01'),
-                productOrders: [{ product: { id: 1, productOrders: [] } as Product, value: 10 }],
-            } as Order);
+            userServiceMock.findOrCreateUser.mockResolvedValue({ id: 1, name: 'John Doe', orders: [] } as User);
+            productServiceMock.findOrCreateProduct.mockResolvedValue({ id: 1, productOrders: [] } as Product);
+            orderRepositoryMock.saveOrder.mockResolvedValue({ id: 1 } as Order);
 
-            await orderService.importOrders('fake/path.txt');
+            await orderService.processImport('fake/path.txt');
 
             expect(orderRepositoryMock.saveOrder).toHaveBeenCalled();
+        });
+
+        it('deve capturar erros ao processar importações', async () => {
+            jest.spyOn(orderService as any, 'readFile').mockReturnValue([
+                "invalid line format",
+            ]);
+
+            jest.spyOn(orderService as any, 'processLine').mockReturnValue(null);
+
+            await orderService.processImport('fake/path.txt');
+
+            expect(orderRepositoryMock.saveOrder).not.toHaveBeenCalled();
         });
     });
 });

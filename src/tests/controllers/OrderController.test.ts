@@ -47,6 +47,13 @@ describe('OrderController', () => {
 
             await orderController.getOrders(req as Request, res as Response);
 
+            expect(orderServiceMock.getOrders).toHaveBeenCalledWith({
+                orderId: 1,
+                startDate: new Date('2023-01-01'),
+                endDate: new Date('2023-12-31'),
+                page: 1,
+                limit: 10,
+            });
             expect(res.json).toHaveBeenCalledWith(mockResult);
         });
 
@@ -71,37 +78,22 @@ describe('OrderController', () => {
         it('deve importar pedidos com sucesso', async () => {
             req.file = {
                 path: 'fake/path.txt',
-                fieldname: 'file',
-                originalname: 'orders.txt',
-                encoding: '7bit',
-                mimetype: 'text/plain',
-                size: 1024,
-                destination: 'uploads/',
-                filename: 'orders.txt',
-                buffer: Buffer.from(''),
             } as any;
 
             orderServiceMock.importOrders.mockResolvedValue();
 
             await orderController.importOrders(req as Request, res as Response);
 
-            expect(res.status).toHaveBeenCalledWith(201);
+            expect(orderServiceMock.importOrders).toHaveBeenCalledWith('fake/path.txt');
+            expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({
-                message: 'Pedidos importados com sucesso!'
+                message: 'Pedidos adicionados à fila de importação!',
             });
         });
 
         it('deve retornar erro 500 em caso de exceção durante a importação', async () => {
             req.file = {
                 path: 'fake/path.txt',
-                fieldname: 'file',
-                originalname: 'orders.txt',
-                encoding: '7bit',
-                mimetype: 'text/plain',
-                size: 1024,
-                destination: 'uploads/',
-                filename: 'orders.txt',
-                buffer: Buffer.from(''),
             } as any;
 
             orderServiceMock.importOrders.mockRejectedValue(new Error('Erro ao importar pedidos'));
@@ -110,7 +102,7 @@ describe('OrderController', () => {
 
             expect(res.status).toHaveBeenCalledWith(500);
             expect(res.json).toHaveBeenCalledWith({
-                message: 'Erro ao importar pedidos',
+                message: 'Erro ao tentar adicionar o(s) pedido(s) na fila de importação.',
                 error: 'Erro ao importar pedidos',
             });
         });
