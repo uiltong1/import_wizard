@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   rabbitmq:
@@ -16,7 +16,17 @@ services:
       - .:/app
     depends_on:
       - rabbitmq
-    environment:
-      - NODE_ENV=development
+    command: ["npm", "run", "dev"]
     ports:
       - "3000:3000"
+
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: ["npm", "run", "start:consumers"]
+    depends_on:
+      - rabbitmq
+      - app

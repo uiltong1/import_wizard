@@ -13,5 +13,3 @@ COPY ./src ./src
 RUN chmod -R 755 ./src
 
 COPY tsconfig.json ./
-
-CMD ["npm", "run", "dev"]
