@@ -1,16 +1,16 @@
 import { Product } from "../../entities/Product";
-import { IProductRepository } from "../../repositories/interfaces/ProductRepositoryInterface";
+import { ProductRepositoryInterface } from "../../repositories/interfaces/ProductRepositoryInterface";
 import { ProductService } from "../../services/ProductService";
 
 describe('ProductService', () => {
     let productService: ProductService;
-    let productRepositoryMock: jest.Mocked<IProductRepository>;
+    let productRepositoryMock: jest.Mocked<ProductRepositoryInterface>;
 
     beforeEach(() => {
         productRepositoryMock = {
             findOneById: jest.fn(),
             createProduct: jest.fn(),
-        } as unknown as jest.Mocked<IProductRepository>;
+        } as unknown as jest.Mocked<ProductRepositoryInterface>;
 
         productService = new ProductService(productRepositoryMock);
     });
