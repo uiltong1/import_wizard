@@ -13,10 +13,10 @@ services:
   app:
     build: .
     volumes:
-      - .:/app
+      - ./backend:/app
     depends_on:
       - rabbitmq
-    command: ["npm", "run", "dev"]
+    command: ["/bin/sh", "./init.sh", "npm", "run", "dev"]
     ports:
       - "3000:3000"
 
@@ -25,8 +25,8 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - .:/app
-    command: ["npm", "run", "start:consumers"]
+      - ./backend:/app
+    command: ["/bin/sh", "./init.sh", "npm", "run", "start:consumers"]
     depends_on:
       - rabbitmq
       - app

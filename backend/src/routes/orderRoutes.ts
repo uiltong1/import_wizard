@@ -95,7 +95,7 @@ const orderController = container.get<OrderController>(TYPES.OrderController);
  *       500:
  *         description: Erro ao obter pedidos
  */
-router.get('/orders', (req, res) => orderController.getOrders(req, res));
+router.get('/orders', async (req, res) => await orderController.getOrders(req, res));
 
 
 /**
@@ -117,16 +117,10 @@ router.get('/orders', (req, res) => orderController.getOrders(req, res));
  *                 description: O arquivo contendo os pedidos a serem importados.
  *     responses:
  *       200:
- *         description: Pedidos importados com sucesso
+ *         description: Pedidos adicionados à fila de importação!
  *       500:
- *         description: Erro ao processar o pedido
+ *         description: Erro ao tentar adicionar o(s) pedido(s) na fila de importação.
  */
-router.post('/import-orders', upload.single('file'), async (req, res) => {
-    try {
-        await orderController.importOrders(req, res);
-    } catch (error) {
-        res.status(500).json({ message: 'Erro ao processar o pedido' });
-    }
-});
+router.post('/import-orders', upload.single('file'), async (req, res) => await orderController.importOrders(req, res));
 
 export default router;
