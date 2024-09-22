@@ -20,11 +20,37 @@
         </div>
       </div>
     </div>
+    <div v-if="users && users.length">
+      <div v-for="user in users" :key="user.user_id">
+        <UserOrder :user="user" />
+      </div>
+    </div>
   </div>
 </template>
-
 <script setup lang="ts">
+import { ref, computed } from 'vue';
+import { FetchOrdersParams } from '../_api/OrderService';
+import { useStore } from '../../../store';
+import UserOrder from '../components/UserOrder.vue';
+
 defineOptions({
   name: 'IndexOrder',
 });
+
+const searchQuery = ref<string>('');
+const store = useStore();
+
+const loadOrders = () => {
+  console.log(searchQuery.value);
+  const params: FetchOrdersParams = {
+    page: 5,
+    limit: 90,
+  };
+
+  store.dispatch('fetchOrders', params);
+};
+
+await loadOrders();
+
+const users = computed(() => store.getters.users);
 </script>

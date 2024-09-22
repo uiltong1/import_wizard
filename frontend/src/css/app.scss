@@ -15,3 +15,18 @@ body {
     font-weight: bold;
     color: #3B3B3B;
 }
+
+.order-card {
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.order-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.user-card {
+    margin-bottom: 20px;
+  }
+  

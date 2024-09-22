@@ -10,7 +10,9 @@
     </q-footer>
     <q-page-container style="height: 100%">
       <q-page class="q-pa-md" style="height: 100%">
-        <router-view />
+        <Suspense>
+          <router-view />
+        </Suspense>
       </q-page>
     </q-page-container>
   </q-layout>
