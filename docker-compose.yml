@@ -30,3 +30,11 @@ services:
     depends_on:
       - rabbitmq
       - app
+
+  frontend:
+    build: .
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./frontend:/app
+    command: ["npm", "run", "dev"]
