@@ -3,11 +3,11 @@ import axios from 'axios';
 const API_URL = 'http://localhost:3000/api/orders';
 
 export interface FetchOrdersParams {
-    startDate?: string;
-    endDate?: string;
-    orderId?: number;
-    page?: number;
-    limit?: number;
+    startDate?: string | null;
+    endDate?: string | null;
+    orderId?: number | null;
+    page?: number | null;
+    limit?: number | null;
 }
 
 interface Product {
@@ -41,7 +41,14 @@ export const fetchOrders = async (params: FetchOrdersParams): Promise<FetchOrder
         headers: {
             'Content-Type': 'application/json',
         },
-        params,
+        params: {
+            ...params,
+            ...(params.startDate !== null && { startDate: params.startDate }),
+            ...(params.endDate !== null && { endDate: params.endDate }),
+            ...(params.orderId !== null && { orderId: params.orderId }),
+            ...(params.page !== null && { page: params.page }),
+            ...(params.limit !== null && { limit: params.limit }),
+        },
     });
 
     return response.data;

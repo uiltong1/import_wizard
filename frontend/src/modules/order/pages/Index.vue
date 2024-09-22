@@ -46,7 +46,7 @@
         </q-input>
       </div>
     </div>
-    <div class="row-rever">
+    <div>
       <div class="col-md-2 q-mb-md q-mx-md">
         <div class="column">
           <q-btn
@@ -61,6 +61,24 @@
     <div v-if="users && users.length">
       <div v-for="user in users" :key="user.user_id">
         <UserOrder :user="user" />
+      </div>
+    </div>
+
+    <div class="column items-end">
+      <div>
+        <q-btn
+          :disabled="currentPage === 1"
+          @click="changePage(currentPage - 1)"
+          label="Anterior"
+        />
+        <span class="q-mx-md"
+          >Página {{ currentPage }} de {{ totalPages }}</span
+        >
+        <q-btn
+          :disabled="currentPage === totalPages"
+          @click="changePage(currentPage + 1)"
+          label="Próximo"
+        />
       </div>
     </div>
   </div>
@@ -78,6 +96,8 @@ defineOptions({
 const orderId = ref<number | null>(null);
 const startDate = ref<string | null>(null);
 const endDate = ref<string | null>(null);
+const currentPage = ref(1);
+const limit = 10;
 
 const store = useStore();
 
@@ -89,15 +109,20 @@ const handleSearch = async () => {
   const params: FetchOrdersParams = {
     startDate: startDate.value || null,
     endDate: endDate.value || null,
-    orderId: orderId.value !== undefined ? orderId.value : null,
-    page: 1,
-    limit: 10,
+    orderId: orderId.value || null,
+    page: currentPage.value,
+    limit,
   };
-
   await store.dispatch('fetchOrders', params);
+};
+
+const changePage = (page: number) => {
+  currentPage.value = page;
+  handleSearch();
 };
 
 await handleSearch();
 
 const users = computed(() => store.getters.users);
+const totalPages = computed(() => store.getters.totalPages);
 </script>
