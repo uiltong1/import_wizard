@@ -53,7 +53,7 @@
             label="Importar Pedidos"
             color="secondary"
             icon="add"
-            @click="handleCreate"
+            @click="openModal"
           />
         </div>
       </div>
@@ -81,6 +81,14 @@
         />
       </div>
     </div>
+
+    <div>
+      <file-upload-modal
+        :isOpen="isModalOpen"
+        @close="isModalOpen = false"
+        @submit="submitImport"
+      />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -88,6 +96,7 @@ import { ref, computed } from 'vue';
 import { FetchOrdersParams } from '../_api/OrderService';
 import { useStore } from '../../../store';
 import UserOrder from '../components/UserOrder.vue';
+import FileUploadModal from '../components/FileUploadModal.vue';
 
 defineOptions({
   name: 'IndexOrder',
@@ -101,9 +110,8 @@ const limit = 10;
 
 const store = useStore();
 
-const handleCreate = () => {
-  console.log('Criar Pedido');
-};
+const users = computed(() => store.getters.users);
+const totalPages = computed(() => store.getters.totalPages);
 
 const handleSearch = async () => {
   const params: FetchOrdersParams = {
@@ -123,6 +131,13 @@ const changePage = (page: number) => {
 
 await handleSearch();
 
-const users = computed(() => store.getters.users);
-const totalPages = computed(() => store.getters.totalPages);
+const isModalOpen = ref(false);
+
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const submitImport = async (file: File) => {
+  console.log('Arquivo enviado:', file);
+};
 </script>
