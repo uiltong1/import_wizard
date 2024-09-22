@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/orders';
+const API_URL = 'http://localhost:3000/api';
 
 export interface FetchOrdersParams {
     startDate?: string | null;
@@ -37,7 +37,7 @@ interface FetchOrdersResponse {
 
 
 export const fetchOrders = async (params: FetchOrdersParams): Promise<FetchOrdersResponse> => {
-    const response = await axios.get<FetchOrdersResponse>(API_URL, {
+    const response = await axios.get<FetchOrdersResponse>(`${API_URL}/orders`, {
         headers: {
             'Content-Type': 'application/json',
         },
@@ -53,3 +53,15 @@ export const fetchOrders = async (params: FetchOrdersParams): Promise<FetchOrder
 
     return response.data;
 };
+
+export const importOrders = async (file: File): Promise<void> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    await axios.post(`${API_URL}/import-orders`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
+

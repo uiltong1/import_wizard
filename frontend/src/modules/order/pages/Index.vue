@@ -97,6 +97,7 @@ import { FetchOrdersParams } from '../_api/OrderService';
 import { useStore } from '../../../store';
 import UserOrder from '../components/UserOrder.vue';
 import FileUploadModal from '../components/FileUploadModal.vue';
+import { Notify } from 'quasar';
 
 defineOptions({
   name: 'IndexOrder',
@@ -138,6 +139,18 @@ const openModal = () => {
 };
 
 const submitImport = async (file: File) => {
-  console.log('Arquivo enviado:', file);
+  try {
+    await store.dispatch('uploadFile', file);
+    isModalOpen.value = false;
+    Notify.create({
+      type: 'positive',
+      message: 'Arquivo adiciona na fila de importação.',
+    });
+  } catch (error) {
+    Notify.create({
+      type: 'negative',
+      message: 'Erro ao enviar o arquivo. Tente novamente.',
+    });
+  }
 };
 </script>

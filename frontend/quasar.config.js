@@ -2,47 +2,42 @@ const { configure } = require('quasar/wrappers');
 
 module.exports = configure(function (/* ctx */) {
   return {
-    boot: [
-      'axios',
-    ],
-    css: [
-      'app.scss'
-    ],
-    extras: [
-      'roboto-font',
-      'material-icons',
-    ],
+    boot: ['axios'],
+    css: ['app.scss'],
+    extras: ['roboto-font', 'material-icons'],
     build: {
       target: {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
-        node: 'node20'
+        node: 'node20',
       },
       vueRouterMode: 'hash',
       vitePlugins: [
-        ['vite-plugin-checker', {
-          vueTsc: {
-            tsconfigPath: 'tsconfig.vue-tsc.json'
+        [
+          'vite-plugin-checker',
+          {
+            vueTsc: {
+              tsconfigPath: 'tsconfig.vue-tsc.json',
+            },
+            eslint: {
+              lintCommand: 'eslint "./**/*.{js,ts,mjs,cjs,vue}"',
+            },
           },
-          eslint: {
-            lintCommand: 'eslint "./**/*.{js,ts,mjs,cjs,vue}"'
-          }
-        }, { server: false }]
-      ]
+          { server: false },
+        ],
+      ],
     },
     devServer: {
-      open: true
+      open: true,
     },
     framework: {
       config: {},
-      plugins: []
+      plugins: ['Notify'],
     },
     animations: [],
     ssr: {
       pwa: false,
       prodPort: 3000,
-      middlewares: [
-        'render'
-      ]
+      middlewares: ['render'],
     },
     pwa: {
       workboxMode: 'generateSW',
@@ -53,20 +48,18 @@ module.exports = configure(function (/* ctx */) {
     },
     cordova: {},
     capacitor: {
-      hideSplashscreen: true
+      hideSplashscreen: true,
     },
     electron: {
       inspectPort: 5858,
       bundler: 'packager',
       packager: {},
       builder: {
-        appId: 'frontend'
-      }
+        appId: 'frontend',
+      },
     },
     bex: {
-      contentScripts: [
-        'my-content-script'
-      ]
-    }
-  }
+      contentScripts: ['my-content-script'],
+    },
+  };
 });
