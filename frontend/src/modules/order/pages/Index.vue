@@ -15,21 +15,33 @@
           v-model="orderId"
         >
           <template #append>
-            <q-icon name="search" class="cursor-pointer" />
+            <q-icon
+              name="search"
+              class="cursor-pointer"
+              @click="handleSearch"
+            />
           </template>
         </q-input>
       </div>
       <div class="col-md-4 q-mb-md q-mx-md">
         <q-input filled type="date" label="Data Inicial" v-model="startDate">
           <template #append>
-            <q-icon name="search" class="cursor-pointer" />
+            <q-icon
+              name="search"
+              class="cursor-pointer"
+              @click="handleSearch"
+            />
           </template>
         </q-input>
       </div>
       <div class="col-md-4 q-mb-md q-mx-md">
         <q-input filled type="date" label="Data Final" v-model="endDate">
           <template #append>
-            <q-icon name="search" class="cursor-pointer" />
+            <q-icon
+              name="search"
+              class="cursor-pointer"
+              @click="handleSearch"
+            />
           </template>
         </q-input>
       </div>
@@ -63,31 +75,29 @@ defineOptions({
   name: 'IndexOrder',
 });
 
-const searchQuery = ref<string>('');
 const orderId = ref<number | null>(null);
 const startDate = ref<string | null>(null);
 const endDate = ref<string | null>(null);
 
-const handleCreate = () => {
-  console.log('asdasda');
-};
-
 const store = useStore();
 
-const loadOrders = () => {
-  console.log(searchQuery.value);
-  const params: FetchOrdersParams = {
-    /* startDate: '2021-11-23',
-    endDate: '2021-11-27',
-    orderId: 146, */
-    page: 5,
-    limit: 90,
-  };
-
-  store.dispatch('fetchOrders', params);
+const handleCreate = () => {
+  console.log('Criar Pedido');
 };
 
-await loadOrders();
+const handleSearch = async () => {
+  const params: FetchOrdersParams = {
+    startDate: startDate.value || null,
+    endDate: endDate.value || null,
+    orderId: orderId.value !== undefined ? orderId.value : null,
+    page: 1,
+    limit: 10,
+  };
+
+  await store.dispatch('fetchOrders', params);
+};
+
+await handleSearch();
 
 const users = computed(() => store.getters.users);
 </script>
