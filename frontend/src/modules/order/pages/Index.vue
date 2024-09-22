@@ -63,7 +63,11 @@
         <UserOrder :user="user" />
       </div>
     </div>
-
+    <div v-else class="user-card">
+      <div class="row justify-center">
+        <span>Nenhum registro encontrado.</span>
+      </div>
+    </div>
     <div class="column items-end">
       <div>
         <q-btn
