@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { AppDataSource } from '../database/dataSource';
+import { AppDataSource } from '../config/dataSource';
 import { Product } from '../entities/Product';
 import { ProductRepositoryInterface } from './interfaces/ProductRepositoryInterface';
 

@@ -2,7 +2,7 @@ import "reflect-metadata";
 
 import express from 'express';
 import cors from 'cors';
-import { AppDataSource } from './database/dataSource';
+import { AppDataSource } from './config/dataSource';
 import { swaggerUi, swaggerDocs } from './config/swagger';
 
 import orderRoutes from './routes/orderRoutes';

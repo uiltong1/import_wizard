@@ -1,5 +1,5 @@
 import logger from "../config/logger";
-import { AppDataSource } from "../database/dataSource";
+import { AppDataSource } from "../config/dataSource";
 import { consumeOrders } from "./orderConsumer";
 
 const startConsumers = async () => {

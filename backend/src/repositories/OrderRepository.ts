@@ -1,6 +1,6 @@
 import { OrderRepositoryInterface } from './interfaces/OrderRepositoryInterface';
 import { Order } from '../entities/Order';
-import { AppDataSource } from '../database/dataSource';
+import { AppDataSource } from '../config/dataSource';
 import { PaginateParamsOrdersDTO } from '../DTO/PaginateParamsOrdersDTO';
 import { injectable } from 'inversify';
 
