@@ -1,6 +1,5 @@
-echo "🔍 Executando pre-commit hook..."
+echo "🔍 Executando testes..."
 
 docker exec -i import_wizard-backend-1 npm test
 
-
-echo "✅ Pre-commit hook finalizado com sucesso!"
+echo "✅ Testes finalizados com sucesso!"
