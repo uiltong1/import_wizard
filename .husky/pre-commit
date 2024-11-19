@@ -1,0 +1,20 @@
+#!/bin/sh
+
+echo "🔍 Verificando o nome da branch..."
+
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+
+echo "Nome da branch: $BRANCH_NAME"
+
+PATTERN="^(feat|fix|hotfix)\/[A-Z0-9-]+$"
+
+case "$BRANCH_NAME" in
+  main|feat/*|fix/*|hotfix/*|chore/*) 
+    echo "✅ Nome da branch '$BRANCH_NAME' está correto."
+    ;;
+  *)
+    echo "Erro: Nome da branch '$BRANCH_NAME' não segue o padrão esperado."
+    echo "Padrão esperado: 'feat/xxxx', 'fix/xxxx', 'chore/xxxx' ou 'hotfix/xxxx'."
+    exit 1
+    ;;
+esac
